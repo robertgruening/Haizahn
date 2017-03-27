@@ -8,14 +8,16 @@ Logger::configure(array(
     ),
     'appenders' => array(
         'default' => array(
-            'class' => 'LoggerAppenderFile',
+            'class' => 'LoggerAppenderRollingFile',            
             'layout' => array(
                 'class' => 'LoggerLayoutPattern',
                 'params' => array(
                     'conversionPattern' => '%date{d.m.Y H:i:s} %-5level %msg<br/>%n')
             ),
             'params' => array(
-                'file' => __DIR__ . '/log.html',
+                'file' => __DIR__ . '/log/log.html',
+                'maxFileSize' => '1MB',
+                'maxBackupIndex' => 5,
                 'append' => true
             )
         )
