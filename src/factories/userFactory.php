@@ -1,4 +1,5 @@
 <?php
+include_once(__DIR__."/../packages/log4php/Logger.php");
 include_once(__DIR__."/config.php");
 include_once(__DIR__."/../models/user.php");
 
@@ -18,6 +19,10 @@ class UserFactory
 	#region get	
 	public function Get($id)
 	{
+		Logger::configure(dirname(__FILE__)."/../packages/log4php/config.xml");
+		$logger = Logger::getLogger("default");
+		$logger->debug("Getting user by ID (".$id.")");
+
 		$mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
 		
 		if (!$mysqli->connect_errno)
