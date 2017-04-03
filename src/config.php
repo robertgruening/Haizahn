@@ -8,7 +8,7 @@ Logger::configure(array(
     ),
     'appenders' => array(
         'default' => array(
-            'class' => 'LoggerAppenderRollingFile',            
+            'class' => 'LoggerAppenderRollingFile',
             'layout' => array(
                 'class' => 'LoggerLayoutPattern',
                 'params' => array(
