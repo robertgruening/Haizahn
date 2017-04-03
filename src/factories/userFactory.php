@@ -18,12 +18,25 @@ class UserFactory
     }
 
     #endregion
-    #region get	
+    
+    #region get	    
+    public function GetById($id)
+    {
+        return $this->SelectById($id);
+    }
+    
+    public function GetByName($name)
+    {
+        return $this->SelectByName($name);
+    }
 
-    public function Get($id)
+    #endregion
+    
+    #region select
+    protected function SelectById($id)
     {
         global $logger;
-        $logger->debug("Getting user by ID (" . $id . ")");
+        $logger->debug("Selecting user by ID = " . $id);
 
         $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
 
@@ -35,11 +48,38 @@ class UserFactory
                                         WHERE Id = " . $id . ";");
             if (!$mysqli->errno)
             {
-                $datensatz = $ergebnis->fetch_assoc();
-                $user = $this->Create(intval($datensatz["Id"]));
-                $user->SetName($datensatz["Name"]);
-                $user->SetEmail($datensatz["Email"]);
+                $user = $this->ConvertToObject($ergebnis->fetch_assoc());
+                $mysqli->close();
 
+                return $user;
+            }
+        }
+
+        $mysqli->close();
+
+        return null;
+	}
+    
+    public function SelectByName($name)
+    {
+        global $logger;
+        $logger->debug("Selecting user by nane = '" . $name . "'");
+
+        $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+
+        if (!$mysqli->connect_errno)
+        {
+            $mysqli->set_charset("utf8");
+            $ergebnis = $mysqli->query("SELECT *
+                                        FROM User
+                                        WHERE Id = " . $id . ";");
+            if ($mysqli->errno)
+            {				
+				$logger->error($mysqli->mysql_error());
+			}
+			else
+            {
+                $user = $this->Convert($ergebnis->fetch_assoc());
                 $mysqli->close();
 
                 return $user;
@@ -50,16 +90,121 @@ class UserFactory
 
         return null;
     }
-
     #endregion
+    
     #region set
+    public function Set($user)
+    {
+        global $logger;
+        $logger->debug("Setting user '".$user->GetName()."'");
+        
+		if ($user->GetId() == -1)
+		{
+			$this->Insert($user);
+		}
+		else
+		{
+			$this->Update($user);
+		}
+	}
     #endregion
+    
+    #region insert
+    protected function Insert($user)
+    {
+        global $logger;
+        $logger->debug("Inserting user '".$user->GetName()."'");
+        
+		$name = $user->GetName();
+		$password = $user->GetPassword();
+		$email = $user->GetEmail();
+			
+		$mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+		
+		if ($mysqli->connect_errno)
+		{
+			$logger->error($mysqli->connect_error);
+		}
+		else
+		{
+			$mysqli->set_charset("utf8");
+			$ergebnis = $mysqli->query("INSERT INTO User(Name, Password, Email)
+										VALUES('".$name."', '".$password."', '".$email."');");
+		}
+		$mysqli->close();
+	}
+    #endregion
+    
+    #region update
+    protected function Update($user)
+    {
+        global $logger;
+        $logger->debug("Updating user '".$user->GetName()."'");
+        
+		$name = $user->GetName();
+		$password = $user->GetPassword();
+		$email = $user->GetEmail();
+			
+		$mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+		
+		if ($mysqli->connect_errno)
+		{
+			$logger->error($mysqli->connect_error);
+		}
+		else
+		{
+			$mysqli->set_charset("utf8");
+			$ergebnis = $mysqli->query("UPDATE User
+										SET Name='".$name.",
+											Password='".$password.",
+											Email='".$email.",
+										WHERE Id=".$id.";");
+		}
+		$mysqli->close();
+	}
+    #endregion
+    
     #region delete
+    protected function Delete($user)
+    {
+        global $logger;
+        $logger->debug("Deleting user '".$user->GetName()."'");
+        
+		$name = $user->GetName();
+		$password = $user->GetPassword();
+		$email = $user->GetEmail();
+			
+		$mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+		
+		if ($mysqli->connect_errno)
+		{
+			$logger->error($mysqli->connect_error);
+		}
+		else
+		{
+			$mysqli->set_charset("utf8");
+			$ergebnis = $mysqli->query("DELETE User										
+										WHERE Id=".$id.";");
+		}
+		$mysqli->close();
+	}
     #endregion
     #region convert	
+    protected function ConvertToObject($dataRow)
+    {
+        global $logger;
+        $logger->debug("Converting data row to user");
+		$user = $this->Create(intval($dataRow["Id"]));
+		$user->SetName($dataRow["Name"]);
+		$user->SetEmail($dataRow["Email"]);
+		
+		return $user;
+	}
 
     public function ConvertToAssocArray($user)
     {
+        global $logger;
+        $logger->debug("Converting user '" . $user->GetName() . "' to associativ array");		
         $assocArray = array();
         $assocArray["Id"] = $user->GetId();
         $assocArray["Name"] = $user->GetName();

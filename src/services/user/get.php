@@ -8,7 +8,5 @@ if (isset($_GET["Id"]))
 {	
 	$id = intval($_GET["Id"]);		
 	$userFactory = new UserFactory();		
-	echo json_encode($userFactory->ConvertToAssocArray($userFactory->Get($id)));
+	echo json_encode($userFactory->ConvertToAssocArray($userFactory->GetById($id)));
 }
-
-echo "";

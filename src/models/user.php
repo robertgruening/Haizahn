@@ -4,7 +4,8 @@ class User
 	#region
 	private $_id = -1;
 	private $_name = "";
-	private $_email = "";		
+	private $_password = "";
+	private $_email = "";
 	#endregion
 	
 	#region properties
@@ -26,6 +27,16 @@ class User
 	public function SetName($name)
 	{
 		$this->_name = $name;
+	}
+	
+	public function GetPassword()
+	{
+		return $this->_password;
+	}
+	
+	public function SetPassword($password)
+	{
+		$this->_password = $password;
 	}
 	
 	public function GetEmail()
