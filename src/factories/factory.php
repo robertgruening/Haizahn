@@ -25,6 +25,9 @@ abstract class Factory
 
     public function Set($object)
     {
+        global $logger;
+        $logger->debug("Setting element ".$user->GetId());
+        
         if ($object->GetId() == -1)
         {
             self::Insert($object);
