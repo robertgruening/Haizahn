@@ -1,6 +1,6 @@
 # Haizahn
 
-Online-Plattform m, um persönliche 
+Online-Plattform, um persönliche 
 Favoriten/Bookmarks/Links zu ver-
 walten. URLs werden mit einem Titel 
 und beliebig vielen Schalgworten 
