@@ -1,10 +1,9 @@
 <?php
 
-include_once(__DIR__ . "/../config.php");
-include_once(__DIR__ . "/config.db.php");
+include_once(__DIR__ . "/factory.php");
 include_once(__DIR__ . "/../models/user.php");
 
-class UserFactory
+class UserFactory extends Factory
 {
     #region methods
     #region create
@@ -19,17 +18,11 @@ class UserFactory
 
     #endregion
     
-    #region get	    
-    public function GetById($id)
-    {
-        return $this->SelectById($id);
-    }
-    
+    #region get    
     public function GetByName($name)
     {
         return $this->SelectByName($name);
     }
-
     #endregion
     
     #region select
@@ -92,23 +85,6 @@ class UserFactory
     }
     #endregion
     
-    #region set
-    public function Set($user)
-    {
-        global $logger;
-        $logger->debug("Setting user '".$user->GetName()."'");
-        
-		if ($user->GetId() == -1)
-		{
-			$this->Insert($user);
-		}
-		else
-		{
-			$this->Update($user);
-		}
-	}
-    #endregion
-    
     #region insert
     protected function Insert($user)
     {
@@ -165,7 +141,7 @@ class UserFactory
     #endregion
     
     #region delete
-    protected function Delete($user)
+    public function Delete($user)
     {
         global $logger;
         $logger->debug("Deleting user '".$user->GetName()."'");
