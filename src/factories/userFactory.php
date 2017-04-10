@@ -1,13 +1,14 @@
 <?php
 
 include_once(__DIR__ . "/factory.php");
+include_once(__DIR__ . "/tagFactory.php");
+include_once(__DIR__ . "/bookmarkFactory.php");
 include_once(__DIR__ . "/../models/user.php");
 
 class UserFactory extends Factory
 {
     #region methods
     #region create
-
     public function Create($id)
     {
         $user = new User();
@@ -15,7 +16,6 @@ class UserFactory extends Factory
 
         return $user;
     }
-
     #endregion
     
     #region get    
@@ -39,7 +39,11 @@ class UserFactory extends Factory
             $ergebnis = $mysqli->query("SELECT *
                                         FROM User
                                         WHERE Id = " . $id . ";");
-            if (!$mysqli->errno)
+            if ($mysqli->errno)
+            {
+				$logger->error($mysqli->mysql_error());
+			}
+			else
             {
                 $user = $this->ConvertToObject($ergebnis->fetch_assoc());
                 $mysqli->close();
@@ -53,7 +57,7 @@ class UserFactory extends Factory
         return null;
 	}
     
-    public function SelectByName($name)
+    protected function SelectByName($name)
     {
         global $logger;
         $logger->debug("Selecting user by nane = '" . $name . "'");
@@ -65,7 +69,7 @@ class UserFactory extends Factory
             $mysqli->set_charset("utf8");
             $ergebnis = $mysqli->query("SELECT *
                                         FROM User
-                                        WHERE Id = " . $id . ";");
+                                        WHERE Name = '" . $name . "';");
             if ($mysqli->errno)
             {				
 				$logger->error($mysqli->mysql_error());
@@ -117,6 +121,7 @@ class UserFactory extends Factory
         global $logger;
         $logger->debug("Updating user '".$user->GetName()."'");
         
+        $id = $user->GetId();
 		$name = $user->GetName();
 		$password = $user->GetPassword();
 		$email = $user->GetEmail();
@@ -131,9 +136,9 @@ class UserFactory extends Factory
 		{
 			$mysqli->set_charset("utf8");
 			$ergebnis = $mysqli->query("UPDATE User
-										SET Name='".$name.",
-											Password='".$password.",
-											Email='".$email.",
+										SET Name='".$name."',
+											Password='".$password."',
+											Email='".$email."',
 										WHERE Id=".$id.";");
 		}
 		$mysqli->close();
@@ -146,9 +151,7 @@ class UserFactory extends Factory
         global $logger;
         $logger->debug("Deleting user '".$user->GetName()."'");
         
-		$name = $user->GetName();
-		$password = $user->GetPassword();
-		$email = $user->GetEmail();
+        $id = $user->GetId();
 			
 		$mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
 		
@@ -165,6 +168,7 @@ class UserFactory extends Factory
 		$mysqli->close();
 	}
     #endregion
+    
     #region convert	
     protected function ConvertToObject($dataRow)
     {
@@ -180,15 +184,57 @@ class UserFactory extends Factory
     public function ConvertToAssocArray($user)
     {
         global $logger;
-        $logger->debug("Converting user '" . $user->GetName() . "' to associativ array");		
+        
+		if ($user == null)
+		{
+			$logger->warn("User to be converted to associativ array is null");
+			
+			return null;
+		}
+		
+        $logger->debug("Converting user '" . $user->GetName() . "' to associativ array");	
         $assocArray = array();
         $assocArray["Id"] = $user->GetId();
         $assocArray["Name"] = $user->GetName();
         $assocArray["Email"] = $user->GetEmail();
+		$assocArray["Bookmarks"] = array();
+        $bookmarkFactory = new BookmarkFactory();
+        
+        for ($i = 0; $i < count($this->GetBookmarks(); $i++)
+        {
+			array_push($assocArray["Bookmarks"], $bookmarkFactory->ConvertToAssocArray($this->GetBookmarks()[$i]));
+		}
+		
+		$assocArray["Tags"] = array();
+        $tagFactory = new TagFactory();
+        
+        for ($i = 0; $i < count($this->GetTags(); $i++)
+        {
+			array_push($assocArray["Tags"], $tagFactory->ConvertToAssocArray($this->GetTags()[$i]));
+		}
 
         return $assocArray;
     }
-
+    #endregion
+    
+    #region fill
+    public function FillBookmarks($user)
+    {
+        global $logger;
+        $logger->debug("Filling bookmarks for user '" . $user->GetName() . "'");
+        
+        $bookmarkFactory = new BookmarkFactory();
+        $user->SetBookmarks($bookmarkFactory->GetByUser($user));
+	}
+	
+    public function FillTags($user)
+    {
+        global $logger;
+        $logger->debug("Filling tags for user '" . $user->GetName() . "'");
+        
+        $tagFactory = new TagFactory();
+        $user->SetTags($tagFactory->GetByUser($user));
+	}
     #endregion
     #endregion
 }
