@@ -6,6 +6,8 @@ class User
 	private $_name = "";
 	private $_password = "";
 	private $_email = "";
+	private $_bookmarks = array();
+	private $_tags = array();
 	#endregion
 	
 	#region properties
@@ -47,6 +49,26 @@ class User
 	public function SetEmail($email)
 	{
 		$this->_email = $email;
+
+	
+	public function GetBookmarks()
+	{
+		return $this->_bookmarks;
+	}
+	
+	public function SetBookmarks($bookamrks)
+	{
+		$this->_bookamrks = $bookamrks;
+	}
+	
+	public function GetTags()
+	{
+		return $this->_tags;
+	}
+	
+	public function SetTags($tags)
+	{
+		$this->tags = $tags;
 	}
 	#endregion
 }
