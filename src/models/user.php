@@ -63,6 +63,11 @@ class User
     {
         $this->_bookmarks = $bookmarks;
     }
+    
+    public function AddBookmark($bookmark)
+    {
+    	array_push($this->_bookmarks, $bookmark);
+    }
 
     public function GetTags()
     {
@@ -72,6 +77,11 @@ class User
     public function SetTags($tags)
     {
         $this->_tags = $tags;
+    }
+    
+    public function AddTag($tag)
+    {
+    	array_push($this->_tags, $tag);
     }
 
     #endregion

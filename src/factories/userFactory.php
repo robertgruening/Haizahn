@@ -204,21 +204,6 @@ class UserFactory extends Factory
         $assocArray["Id"] = $user->GetId();
         $assocArray["Name"] = $user->GetName();
         $assocArray["Email"] = $user->GetEmail();
-        $assocArray["Bookmarks"] = array();
-        $bookmarkFactory = new BookmarkFactory();
-
-        for ($i = 0; $i < count($this->GetBookmarks()); $i++)
-        {
-            array_push($assocArray["Bookmarks"], $bookmarkFactory->ConvertToAssocArray($this->GetBookmarks()[$i]));
-        }
-
-        $assocArray["Tags"] = array();
-        $tagFactory = new TagFactory();
-
-        for ($i = 0; $i < count($this->GetTags()); $i++)
-        {
-            array_push($assocArray["Tags"], $tagFactory->ConvertToAssocArray($this->GetTags()[$i]));
-        }
 
         return $assocArray;
     }
@@ -232,7 +217,7 @@ class UserFactory extends Factory
         $logger->debug("Filling bookmarks for user '" . $user->GetName() . "'");
 
         $bookmarkFactory = new BookmarkFactory();
-        $user->SetBookmarks($bookmarkFactory->GetByUser($user));
+        $user->SetBookmarksSetBookmarks($bookmarkFactory->GetByUser($user));
     }
 
     public function FillTags($user)

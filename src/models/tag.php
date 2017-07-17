@@ -51,6 +51,11 @@ class Tag
     {
         $this->_bookmarks = $bookmarks;
     }
+    
+    public function AddBookmark($bookmark)
+    {
+    	array_push($this->_bookmarks, $bookmark);
+    }
 
     #endregion
 }

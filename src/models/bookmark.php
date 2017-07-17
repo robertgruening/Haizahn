@@ -52,6 +52,11 @@ class Bookmark
     {
         $this->_tags = $tags;
     }
+    
+    public function AddTag($tag)
+    {
+    	array_push($this->_tags, $tag);
+    }
 
     #endregion
 }

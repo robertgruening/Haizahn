@@ -121,7 +121,7 @@ class BookmarkFactory extends Factory
 		else
 		{
 			$mysqli->set_charset("utf8");
-			$ergebnis = $mysqli->query("INSERT INTO Bookamrk(Title, Url, User_Id)
+			$ergebnis = $mysqli->query("INSERT INTO Bookmark(Title, Url, User_Id)
 										VALUES('".$title."', '".$url."', ".$userId.");");
 		}
 		$mysqli->close();
@@ -162,7 +162,7 @@ class BookmarkFactory extends Factory
     public function Delete($bookmark)
     {
         global $logger;
-        $logger->debug("Deleting bookmark '".$user->GetTitle()."'");
+        $logger->debug("Deleting bookmark '".$bookmark->GetTitle()."'");
         
         $id = $bookmark->GetId();
 			
@@ -211,9 +211,7 @@ class BookmarkFactory extends Factory
         $assocArray = array();
         $assocArray["Id"] = $bookmark->GetId();
         $assocArray["Title"] = $bookmark->GetTitle();
-        $assocArray["Url"] = $bookmark->GetUrl();        	
-		$userFactory = new UserFactory();
-		$assocArray["User"] = $userFactory->ConvertToAssocArray($bookmark->GetUser());
+        $assocArray["Url"] = $bookmark->GetUrl();
 
         return $assocArray;
     }

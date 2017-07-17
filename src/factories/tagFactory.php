@@ -22,11 +22,17 @@ class TagFactory extends Factory
 
     public function GetByText($text)
     {
+        global $logger;
+        $logger->debug("Getting element by Text = '" . $text . "'");
+        
         return $this->SelectByText($text);
     }
 
     public function GetByUser($user)
     {
+        global $logger;
+        $logger->debug("Getting element by User = '" . $user->GetName() . "'");
+        
         return $this->SelectByUserId($user->GetId());
     }
 
@@ -153,7 +159,6 @@ class TagFactory extends Factory
         global $logger;
         $logger->debug("Inserting tag '" . $tag->GetText() . "'");
 
-        $id = $tag->GetId();
         $text = $tag->GetText();
         $userId = $tag->GetUser()->GetId();
 
@@ -166,8 +171,8 @@ class TagFactory extends Factory
         else
         {
             $mysqli->set_charset("utf8");
-            $ergebnis = $mysqli->query("INSERT INTO Tag(Id, Text, User_Id)
-					VALUES('" . $id . "', '" . $text . "', '" . $userId . "');");
+            $ergebnis = $mysqli->query("INSERT INTO Tag(Text, User_Id)
+					VALUES('" . $text . "', " . $userId . ");");
         }
         $mysqli->close();
     }
@@ -227,10 +232,6 @@ class TagFactory extends Factory
     }
 
     #endregion
-    #region set
-    #endregion
-    #region delete
-    #endregion
     #region convert	
 
     protected function ConvertToObject($dataRow)
@@ -261,8 +262,6 @@ class TagFactory extends Factory
         $assocArray = array();
         $assocArray["Id"] = $tag->GetId();
         $assocArray["Text"] = $tag->GetText();
-        $userFactory = new UserFactory();
-        $assocArray["User"] = $userFactory->ConvertToAssocArray($tag->GetUser());
 
         return $assocArray;
     }
