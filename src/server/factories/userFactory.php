@@ -217,7 +217,7 @@ class UserFactory extends Factory
         $logger->debug("Filling bookmarks for user '" . $user->GetName() . "'");
 
         $bookmarkFactory = new BookmarkFactory();
-        $user->SetBookmarksSetBookmarks($bookmarkFactory->GetByUser($user));
+        $user->SetBookmarks($bookmarkFactory->GetByUser($user));
     }
 
     public function FillTags($user)
