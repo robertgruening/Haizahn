@@ -79,7 +79,7 @@ class UserFactory extends Factory
             }
             else
             {
-                $user = $this->Convert($ergebnis->fetch_assoc());
+                $user = $this->ConvertToObject($ergebnis->fetch_assoc());
                 $mysqli->close();
 
                 return $user;
@@ -114,6 +114,10 @@ class UserFactory extends Factory
             $mysqli->set_charset("utf8");
             $ergebnis = $mysqli->query("INSERT INTO User(Name, Password, Email)
 										VALUES('" . $name . "', '" . $password . "', '" . $email . "');");
+		    
+		    throw new Exception("Prüfe auf doppelte Einträge, siehe MySQL-Fehler 1062");
+            $logger->error($ergebnis === true ? "TRUE" : "FALSE");
+            $logger->error($mysqli->errno);
         }
         $mysqli->close();
     }

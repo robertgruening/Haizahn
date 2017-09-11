@@ -6,7 +6,7 @@ ini_set("display_errors", 1);
 require_once("./../../models/user.php");
 require_once("./../../factories/userFactory.php");
 
-$userJSON = json_decode($_POST, true);
+$userJSON = $_POST;
 $user = new User();
 
 /*
@@ -31,5 +31,7 @@ else */
 
     $user = $userFactory->GetByName($user->GetName());
 }
+
+$userAssocArray = $userFactory->ConvertToAssocArray($user);
  
-echo json_encode($user);
+echo json_encode($userAssocArray);

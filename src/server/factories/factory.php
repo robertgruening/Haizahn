@@ -24,7 +24,7 @@ abstract class Factory
     public function Set($object)
     {
         global $logger;
-        $logger->debug("Setting element ".$user->GetId());
+        $logger->debug("Setting element ".$object->GetId());
         
         if ($object->GetId() == -1)
         {
