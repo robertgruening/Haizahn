@@ -27,7 +27,7 @@ abstract class Factory
         $logger->debug("Setting element ".$object->GetId());
         
         if ($object->GetId() == -1)
-        {
+        {          
             $this->Insert($object);
         }
         else

@@ -28,7 +28,37 @@ class UserFactory extends Factory
 
     #endregion
     #region select
+    protected function SelectByName($name)
+    {
+        global $logger;
+        $logger->debug("Selecting user by name = '" . $name . "'");
 
+        $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+
+        if (!$mysqli->connect_errno)
+        {
+            $mysqli->set_charset("utf8");
+            $ergebnis = $mysqli->query("SELECT *
+                                        FROM User
+                                        WHERE Name = '" . $name . "';");
+            if ($mysqli->errno)
+            {
+                $logger->error($mysqli->mysql_error());
+            }
+            else
+            {
+                $user = $this->ConvertToObject($ergebnis->fetch_assoc());
+                $mysqli->close();
+
+                return $user;
+            }
+        }
+
+        $mysqli->close();
+
+        return null;
+    }
+    
     protected function SelectById($id)
     {
         global $logger;
@@ -60,36 +90,6 @@ class UserFactory extends Factory
         return null;
     }
 
-    protected function SelectByName($name)
-    {
-        global $logger;
-        $logger->debug("Selecting user by nane = '" . $name . "'");
-
-        $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
-
-        if (!$mysqli->connect_errno)
-        {
-            $mysqli->set_charset("utf8");
-            $ergebnis = $mysqli->query("SELECT *
-                                        FROM User
-                                        WHERE Name = '" . $name . "';");
-            if ($mysqli->errno)
-            {
-                $logger->error($mysqli->mysql_error());
-            }
-            else
-            {
-                $user = $this->ConvertToObject($ergebnis->fetch_assoc());
-                $mysqli->close();
-
-                return $user;
-            }
-        }
-
-        $mysqli->close();
-
-        return null;
-    }
 
     #endregion
     #region insert
@@ -105,6 +105,9 @@ class UserFactory extends Factory
 
         $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
 
+        
+        
+        
         if ($mysqli->connect_errno)
         {
             $logger->error($mysqli->connect_error);
