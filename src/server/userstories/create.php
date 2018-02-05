@@ -6,3 +6,7 @@
  * and open the template in the editor.
  */
 
+abstract class CreateElement
+{ 
+    
+}

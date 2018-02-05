@@ -66,9 +66,14 @@ class User
     
     public function AddBookmark($bookmark)
     {
-    	array_push($this->_bookmarks, $bookmark);
+    	array_push($this->_bookmarks, $bookmark);        
     }
 
+    public function RemoveBookmark($bookmark)
+    {
+        // unset(array_search($bookmark, $this->_bookmarks));
+    }
+    
     public function GetTags()
     {
         return $this->_tags;
