@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <title>Registrierung</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <h1>Registrierung</h1>
+    <p>Benutzername</p>
+    <input id=textboxUserName type=text />
+    <p>E-Mail</p>
+    <input id=textboxEmail type=text />
+    <p>Passwort</p>
+    <input id=textboxPassword type=text />
+    <p>Passwortbestätigung</p>
+    <input id=textboxPasswordConfirmation type=text />
+    </br>
+    <input id=buttonRegistration type=button value=Registrieren onclick=buttonRegistration_onClick() />
+
+
+    <script type="text/javascript">
+        function buttonRegistration_onClick() {
+            var jsonReg = {
+                'Name': document.getElementById('textboxUserName').value,
+                'Email': document.getElementById('textboxEmail').value,
+                'Password': document.getElementById('textboxPassword').value,
+                'PasswordConfirmation': document.getElementById('textboxPasswordConfirmation').value
+            };
+
+            console.log(jsonReg);
+
+            $.ajax({
+                method: "POST",
+                url: "../server/services/user/put.php",
+                dataType: "json",
+                data: jsonReg,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
