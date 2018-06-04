@@ -26,6 +26,12 @@ else */
 
     $user->SetName($userJSON["Name"]);
     $user->SetEmail($userJSON["Email"]);
+
+    if ($userJSON["Password"] == $userJSON["PasswordConfirmation"])
+    {
+        $user->SetPassword($userJSON["Password"]);
+    }
+
     $userFactory = new UserFactory();
     $userFactory->Set($user);
 

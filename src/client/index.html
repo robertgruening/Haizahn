@@ -3,35 +3,51 @@
     <head>
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     </head>
     <body>
-        <script type="text/javascript">
-            
+        <script type="text/javascript">            
             
             $(function() 
             {
                 console.log("Vor dem AJAX-Aufruf");
                 
+                $("body").append("<h1>Put Tom</h1>");
                 $.ajax({
-                    method: "post",
+                    method: "POST",
                     url: "../server/services/user/put.php",                   
-                    data: { Name:"tom", Email: "tom@test.de" },
+                    data: 
+                    {
+                        Name:"tom",
+                        Email: "tom@test.de",
+                        Password: "",
+                        PasswordConfirmation: ""
+                    },
                     dataType: "json",
                     success: function(data)
-                    {
+                    {   
                         $("body").append("<p>" + JSON.stringify(data) + "</p>");
                     }
-                });  
-   
+                });
                         
+                $("body").append("<h1>Get by ID 1</h1>"); 
                 $.ajax({
                     method: "GET",
                     url: "../server/services/user/get.php?Id=1",
                     dataType: "json",
                     success: function(data)
-                    {                       
+                    {     
+                        $("body").append("<p>" + JSON.stringify(data) + "</p>");
+                    }
+                });
+
+                $("body").append("<h1>Get all</h1>");
+                $.ajax({
+                    method: "GET",
+                    url: "../server/services/user/get.php",
+                    dataType: "json",
+                    success: function(data)
+                    {
                         $("body").append("<p>" + JSON.stringify(data) + "</p>");
                     }
                 });

@@ -117,10 +117,12 @@ class UserFactory extends Factory
             $mysqli->set_charset("utf8");
             $ergebnis = $mysqli->query("INSERT INTO User(Name, Password, Email)
 										VALUES('" . $name . "', '" . $password . "', '" . $email . "');");
-		    
-		    throw new Exception("Prüfe auf doppelte Einträge, siehe MySQL-Fehler 1062");
-            $logger->error($ergebnis === true ? "TRUE" : "FALSE");
-            $logger->error($mysqli->errno);
+            if ($mysqli->errno == 1062)
+            {
+                throw new Exception("Prüfe auf doppelte Einträge, siehe MySQL-Fehler 1062");
+                $logger->error($ergebnis === true ? "TRUE" : "FALSE");
+                $logger->error($mysqli->errno);
+            }
         }
         $mysqli->close();
     }
