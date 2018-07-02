@@ -14,8 +14,8 @@
                 
                 $("body").append("<h1>Put Tom</h1>");
                 $.ajax({
-                    method: "POST",
-                    url: "../server/services/user/put.php",                   
+                    method: "PUT",
+                    url: "../server/services/user.php",                   
                     data: 
                     {
                         Name:"tom",
@@ -23,37 +23,75 @@
                         Password: "",
                         PasswordConfirmation: ""
                     },
-                    dataType: "json",
+                    dataType: "JSON",
                     success: function(data)
                     {   
                         $("body").append("<p>" + JSON.stringify(data) + "</p>");
+                    },
+                    error:function(jqXHR, textStatus, errorThrown)
+                    {
+                        if (jqXHR.status == 500)
+                        {
+                            ShowMessage(jqXHR.responseJSON);
+                        }
+                        else
+                        {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
                     }
                 });
                         
                 $("body").append("<h1>Get by ID 1</h1>"); 
                 $.ajax({
                     method: "GET",
-                    url: "../server/services/user/get.php?Id=1",
+                    url: "../server/services/user.php?Id=1",
                     dataType: "json",
                     success: function(data)
                     {     
                         $("body").append("<p>" + JSON.stringify(data) + "</p>");
+                    },
+                    error:function(jqXHR, textStatus, errorThrown)
+                    {
+                        if (jqXHR.status == 500)
+                        {
+                            ShowMessage(jqXHR.responseJSON);
+                        }
+                        else
+                        {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
                     }
                 });
 
                 $("body").append("<h1>Get all</h1>");
                 $.ajax({
                     method: "GET",
-                    url: "../server/services/user/get.php",
+                    url: "../server/services/user.php",
                     dataType: "json",
                     success: function(data)
                     {
                         $("body").append("<p>" + JSON.stringify(data) + "</p>");
+                    },
+                    error:function(jqXHR, textStatus, errorThrown)
+                    {
+                        if (jqXHR.status == 500)
+                        {
+                            ShowMessage(jqXHR.responseJSON);
+                        }
+                        else
+                        {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
                     }
                 });
                  
-                console.log("Nach dem AJAX-Aufruf");         
+                console.log("Nach dem AJAX-Aufruf");
             }); 
+
+            function ShowMessage(messages)
+            {
+                console.log("ShowMessage: " + messages);
+            }
        </script>
     </body>
 </html>

@@ -119,6 +119,7 @@ class UserFactory extends Factory
 										VALUES('" . $name . "', '" . $password . "', '" . $email . "');");
             if ($mysqli->errno == 1062)
             {
+                $mysqli->close();
                 throw new Exception("Prüfe auf doppelte Einträge, siehe MySQL-Fehler 1062");
                 $logger->error($ergebnis === true ? "TRUE" : "FALSE");
                 $logger->error($mysqli->errno);
