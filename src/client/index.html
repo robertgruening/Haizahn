@@ -20,8 +20,8 @@
                     {
                         Name:"tom",
                         Email: "tom@test.de",
-                        Password: "",
-                        PasswordConfirmation: ""
+                        Password: "test",
+                        PasswordConfirmation: "test"
                     },
                     dataType: "JSON",
                     success: function(data)
@@ -41,10 +41,10 @@
                     }
                 });
                         
-                $("body").append("<h1>Get by ID 1</h1>"); 
+                $("body").append("<h1>Get by ID 7</h1>"); 
                 $.ajax({
                     method: "GET",
-                    url: "../server/services/user.php?Id=1",
+                    url: "../server/services/user.php?Id=7",
                     dataType: "json",
                     success: function(data)
                     {     

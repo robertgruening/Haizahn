@@ -4,12 +4,13 @@ class User
 {
     #region
 
-    private $_id = -1;
-    private $_name = "";
-    private $_password = "";
-    private $_email = "";
-    private $_bookmarks = array();
-    private $_tags = array();
+    //Hier Vars ausnahmsweise public für JSON-Encoding
+    public $_id = -1;
+    public $_name = "";
+    public $_password = "";
+    public $_email = "";
+    public $_bookmarks = array();
+    public $_tags = array();
 
     #endregion
     #region properties

@@ -5,6 +5,7 @@ ini_set("display_errors", 1);
 
 require_once("./../models/user.php"); 
 require_once("./../factories/userFactory.php");
+require_once("./../userstories/userManagement/createUser.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "PUT" ||
     $_SERVER["REQUEST_METHOD"] == "POST")
@@ -24,11 +25,28 @@ else
 
 function Save()
 { 
-
  
     parse_str(file_get_contents("php://input"),$_PUT); 
     $userJSON = $_PUT;
-    $user = new User();
+    
+
+    $createUser = new createUser();
+
+    $createUser->setName($userJSON["Name"]);
+    $createUser->setEmail($userJSON["Email"]);
+    $createUser->setPassword($userJSON["Password"]);
+    $createUser->setPasswordConfirmation($userJSON["PasswordConfirmation"]);
+    
+    if($createUser->run())
+    { 
+        echo json_encode($createUser->getUser()); 
+    }
+    else
+    {
+        http_response_code(500);
+        echo json_encode($createUser->getMessages()); 
+    }
+     
 
     /*
     if (isset($_GET["Id"])) {
@@ -45,35 +63,34 @@ function Save()
         //Neu anlegen
         //file_get_contents('php://input');
 
-        $user->SetName($userJSON["Name"]);
-        $user->SetEmail($userJSON["Email"]);
+    //  $user->SetName($userJSON["Name"]);
+    //  $user->SetEmail($userJSON["Email"]);
 
-        if ($userJSON["Password"] == $userJSON["PasswordConfirmation"])
-        {
-            $user->SetPassword($userJSON["Password"]);
-        }
+    //  if ($userJSON["Password"] == $userJSON["PasswordConfirmation"])
+    //  {
+    //      $user->SetPassword($userJSON["Password"]);
+    //  }
 
-        $userFactory = new UserFactory();
-       
-        try
-        {
-            $userFactory->Set($user);
-        }
-        catch (Exception $e)
-        { 
-            http_response_code(500);
-            echo json_encode($e->getMessage()); 
-            return;
-        }
+    //  $userFactory = new UserFactory();
+    // 
+    //  try
+    //  {
+    //      $userFactory->Set($user);
+    //  }
+    //  catch (Exception $e)
+    //  { 
+    //      http_response_code(500);
+    //      echo json_encode($e->getMessage()); 
+    //      return;
+    //  }
 
-        $user = $userFactory->GetByName($user->GetName());
+    //  $user = $userFactory->GetByName($user->GetName());
     }
 
-    $userAssocArray = $userFactory->ConvertToAssocArray($user);
+   //$userAssocArray = $userFactory->ConvertToAssocArray($user);
     
-    echo json_encode($userAssocArray);
+   // echo json_encode($userAssocArray);
 }
-
 
 
 function Get()

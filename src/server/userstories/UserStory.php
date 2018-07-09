@@ -8,17 +8,43 @@
 
 
 abstract class UserStory
-{ 
-    public abstract function Run($jsonBlob)
+{  
+    private $_messages = array();
+    
+ 
+    public function getMessages()
     {
-        if ($this->HasPermissions($jsonBlob))
-        {
-            
-        }
-        
-        //rechte prüfen  allg. speziell
-        //ausführung simulieren
-        //us ausführen
-        
+        return $this->_messages;
     }
+
+    protected function clearMessages()
+    {
+        $this->_messages = array();
+    }
+
+    protected function addMessages($messages)
+    {
+        array_merge($this->_messages, $messages);
+    }
+
+    protected function addMessage($message)
+    {
+        array_push($this->_messages, $message);
+    } 
+
+
+    public function run()
+    {
+        $this->clearMessages();
+        if ($this->areParametersValid())
+        {
+            return $this->execute();
+        }
+    
+        return false;
+    }
+    
+    abstract protected function areParametersValid();
+    abstract protected function execute();
+    
 }
