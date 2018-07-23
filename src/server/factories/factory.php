@@ -18,6 +18,14 @@ abstract class Factory
 
         return $this->SelectById($id);
     }
+
+    public function GetAll()
+    {
+        global $logger;
+        $logger->debug("Getting all elements");
+
+        return $this->SelectAll();
+    }
     #endregion
     
     #region set
@@ -53,6 +61,8 @@ abstract class Factory
     protected abstract function Update($object);
 
     protected abstract function SelectById($id);
+
+    protected abstract function SelectAll();
 }
 
 ?>

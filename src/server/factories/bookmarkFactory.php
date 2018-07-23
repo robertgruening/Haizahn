@@ -99,7 +99,39 @@ class BookmarkFactory extends Factory
         $mysqli->close();
 
         return array();
-	}
+    }
+    
+    protected function SelectAll()
+    {
+        global $logger;
+        $logger->debug("Selecting all bookmarks");
+
+        $elements = array();
+        $mysqli = new mysqli(MYSQL_HOST, MYSQL_BENUTZER, MYSQL_KENNWORT, MYSQL_DATENBANK);
+
+        if (!$mysqli->connect_errno)
+        {
+            $mysqli->set_charset("utf8");
+            $ergebnis = $mysqli->query("SELECT Id
+                                        FROM Bookmark;");
+  
+			if ($mysqli->errno)
+			{
+                $logger->error($mysqli->mysql_error());				
+            }
+            else
+            {
+                while ($datensatz = $ergebnis->fetch_assoc())
+				{
+					array_push($elements, $this->GetById(intval($datensatz["Id"])));
+                }  
+            }
+        }
+
+        $mysqli->close();
+
+        return $elements;
+    }
     #endregion
     
     #region insert

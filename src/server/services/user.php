@@ -6,6 +6,8 @@ ini_set("display_errors", 1);
 require_once("./../models/user.php"); 
 require_once("./../factories/userFactory.php");
 require_once("./../userstories/userManagement/createUser.php");
+require_once("./../userstories/userManagement/loadUser.php");
+require_once("./../userstories/userManagement/loadUsers.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "PUT" ||
     $_SERVER["REQUEST_METHOD"] == "POST")
@@ -96,15 +98,34 @@ function Save()
 function Get()
 {
     if (isset($_GET["Id"]))
-    {	
-        $id = intval($_GET["Id"]);		
-        $userFactory = new UserFactory();		
-        echo json_encode($userFactory->ConvertToAssocArray($userFactory->GetById($id)));
+    {		
+        $loadUser = new loadUser();
+
+        $loadUser->setId(intval($_GET["Id"]));
+         
+        if ($loadUser->run())
+        { 
+            echo json_encode($loadUser->getUser()); 
+        }
+        else
+        {
+            http_response_code(500);
+            echo json_encode($loadUser->getMessages()); 
+        }
     }
     else
     {
-        http_response_code(500);
-        echo json_encode("Id not set");
-    }
+        $loadUsers = new loadUsers();
+
+        if ($loadUsers->run())
+        { 
+            echo json_encode($loadUsers->getUsers()); 
+        }
+        else
+        {
+            http_response_code(500);
+            echo json_encode($loadUsers->getMessages()); 
+        }
+    } 
 }
 
