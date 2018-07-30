@@ -5,89 +5,89 @@ class User
     #region
 
     //Hier Vars ausnahmsweise public für JSON-Encoding
-    public $_id = -1;
-    public $_name = "";
-    public $_password = "";
-    public $_email = "";
-    public $_bookmarks = array();
-    public $_tags = array();
+    public $Id = -1;
+    public $Name = "";
+    public $Password = "";
+    public $Email = "";
+    public $Bookmarks = array();
+    public $Tags = array();
 
     #endregion
     #region properties
 
     public function GetId()
     {
-        return $this->_id;
+        return $this->Id;
     }
 
     public function SetId($id)
     {
-        $this->_id = $id;
+        $this->Id = $id;
     }
 
     public function GetName()
     {
-        return $this->_name;
+        return $this->Name;
     }
 
     public function SetName($name)
     {
-        $this->_name = $name;
+        $this->Name = $name;
     }
 
     public function GetPassword()
     {
-        return $this->_password;
+        return $this->Password;
     }
 
     public function SetPassword($password)
     {
-        $this->_password = $password;
+        $this->Password = $password;
     }
 
     public function GetEmail()
     {
-        return $this->_email;
+        return $this->Email;
     }
 
     public function SetEmail($email)
     {
-        $this->_email = $email;
+        $this->Email = $email;
     }
 
     public function GetBookmarks()
     {
-        return $this->_bookmarks;
+        return $this->Bookmarks;
     }
 
     public function SetBookmarks($bookmarks)
     {
-        $this->_bookmarks = $bookmarks;
+        $this->Bookmarks = $bookmarks;
     }
     
     public function AddBookmark($bookmark)
     {
-    	array_push($this->_bookmarks, $bookmark);        
+    	array_push($this->Bookmarks, $bookmark);        
     }
 
     public function RemoveBookmark($bookmark)
     {
-        // unset(array_search($bookmark, $this->_bookmarks));
+        // unset(array_search($bookmark, $this->Bookmarks));
     }
     
     public function GetTags()
     {
-        return $this->_tags;
+        return $this->Tags;
     }
 
     public function SetTags($tags)
     {
-        $this->_tags = $tags;
+        $this->Tags = $tags;
     }
     
     public function AddTag($tag)
     {
-    	array_push($this->_tags, $tag);
+    	array_push($this->Tags, $tag);
     }
 
     #endregion

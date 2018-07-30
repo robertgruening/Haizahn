@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <title>Benutzerverwaltung</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/jquery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/jsgrid/jsgrid.min.css" />
+    <script type="text/javascript" src="js/jsgrid/jsgrid.min.js"></script>
+    <script type="text/javascript" src="js/jsgrid/i18n/jsgrid-de.js"></script>
+</head>
+
+<body>
+    <h1>Benutzerverwaltung</h1>
+    <p>Benutzername</p>
+    <div id=gridContainer></div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            jsGrid.locale("de");
+
+
+            LoadUsers();
+        });
+
+        function LoadUsers() {
+            $.ajax(
+                {
+                    type: "GET",
+                    url: "../server/services/user.php",
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                        if (data) {
+                            ShowUsers(data);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status == 500) {
+                            ShowMessages(jqXHR.responseJSON);
+                        }
+                        else {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
+                    }
+                });
+        }
+
+        function ShowUsers(users) {
+            $("#gridContainer").jsGrid({
+                width: "100%",
+
+                inserting: false,
+                editing: false,
+                sorting: false,
+                paging: false,
+                autoload: false,
+
+                controller: {
+                    insertItem: function (item) {
+                        SaveUser(item);
+                    },
+                    updateItem: function (item) {
+                        SaveUser(item);
+                    },
+                    deleteItem: function (item) {
+                        DeleteUser(item);
+                    }
+                },
+
+                data: users,
+
+                fields: [
+                    {
+                        title: "Id",
+                        name: "Id",
+                        type: "number" 
+                         
+                    },
+                    {
+                        title: "Name",
+                        name: "Name",
+                        type: "text" 
+                      
+                       
+                    },
+                    {
+                        title: "E-Mail",
+                        name: "Email",
+                        type: "text" 
+                    }
+                ]
+            });
+        }
+
+        function SaveUser(user) {
+            var url = "../server/services/user.php";
+
+            if (user.Id != null &&
+                user.Id != -1) {
+                url += user.Id;
+            }
+
+            $.ajax(
+                {
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    data: user,
+                    success: function (data, textStatus, jqXHR) {
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status == 500) {
+                            ShowMessages(jqXHR.responseJSON);
+                        }
+                        else {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
+
+                        LoadUsers();
+                    }
+                });
+        }
+
+        function DeleteUser(user) {
+            $.ajax(
+                {
+                    type: "DELETE",
+                    url: "../server/services/user.php" + user.Id,
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status == 500) {
+                            ShowMessages(jqXHR.responseJSON);
+                        }
+                        else {
+                            console.log("ERROR: " + jqXHR.responseJSON);
+                        }
+
+                        LoadUsers();
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

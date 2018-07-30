@@ -8,6 +8,7 @@ require_once("./../factories/userFactory.php");
 require_once("./../userstories/userManagement/createUser.php");
 require_once("./../userstories/userManagement/loadUser.php");
 require_once("./../userstories/userManagement/loadUsers.php");
+require_once("./../userstories/userManagement/deleteUser.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "PUT" ||
     $_SERVER["REQUEST_METHOD"] == "POST")
@@ -101,7 +102,7 @@ function Get()
     {		
         $loadUser = new loadUser();
 
-        $loadUser->setId(intval($_GET["Id"]));
+        $loadUser->setId($_GET["Id"]);
          
         if ($loadUser->run())
         { 
@@ -126,6 +127,36 @@ function Get()
             http_response_code(500);
             echo json_encode($loadUsers->getMessages()); 
         }
+    } 
+} 
+
+function Delete()
+{ 
+    $loadUser = new loadUser();
+    if (isset($_GET["Id"]))
+    {
+        $loadUser->setId(intval($_GET["Id"]));
+    }
+    if ($loadUser->run())
+    {
+        $user = $loadUser->getUser();
+        
+        $deleteUser = new DeleteUser();
+        $deleteUser->setUser($user);
+        if ($deleteUser->run())
+        {
+            echo json_encode("User (".$user->getId().") ist gelöscht.");
+        }
+        else
+        {
+            http_response_code(500);
+            echo json_encode($deleteUser->getMessages());
+        }
+    }
+    else
+    {
+        http_response_code(500);
+        echo json_encode($loadUser->getMessages());
     } 
 }
 
