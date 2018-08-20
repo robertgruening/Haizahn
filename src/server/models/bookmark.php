@@ -4,58 +4,58 @@ class Bookmark
 {
     #region
 
-    private $_id = -1;
-    private $_title = "";
-    private $_url = "";
-    private $_user = null;
-    private $_tags = array();
-
+    public $Id = -1;
+    public $Title = "";
+    public $URL = "";
+    public $User = null;
+    public $Tags = array();
+   
     #endregion
     #region properties
 
     public function GetId()
     {
-        return $this->_id;
+        return $this->$Id;
     }
 
     public function SetId($id)
     {
-        $this->_id = $id;
+        $this->$Id = $id;
     }
 
     public function GetTitle()
     {
-        return $this->_title;
+        return $this->$Title;
     }
 
     public function SetTitle($title)
     {
-        $this->_title = $title;
+        $this->$Title = $title;
     }
 
     public function GetUser()
     {
-        return $this->_user;
+        return $this->User;
     }
 
     public function SetUser($user)
     {
-        $this->_user = $user;
+        $this->User = $user;
     }
 
     public function GetTags()
     {
-        return $this->_tags;
+        return $this->Tags;
     }
 
     public function SetTags($tags)
     {
-        $this->_tags = $tags;
+        $this->Tags = $tags;
     }
     
     public function AddTag($tag)
     {
-    	array_push($this->_tags, $tag);
+    	array_push($this->Tags, $tag);
     }
 
     #endregion

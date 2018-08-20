@@ -7,8 +7,8 @@
  */
 
 require_once(__DIR__."/../UserStory.php");
-require_once("./../models/user.php"); 
-require_once("./../factories/userFactory.php");
+require_once(__DIR__."/../../models/user.php"); 
+require_once(__DIR__."/../../factories/userFactory.php");
 
 
 class createUser extends UserStory
